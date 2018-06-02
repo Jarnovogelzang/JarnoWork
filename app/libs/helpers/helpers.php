@@ -7,3 +7,11 @@
 
     die();
   }
+
+  function db() {
+    return Database::getInstance();
+  }
+
+  function query() {
+    return new Query();
+  }
