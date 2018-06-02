@@ -11,13 +11,18 @@
       array_shift($url);
 
       // Query parameters
-      $queryParameters = $url;
-      
+      $data = $url;
+
       // Dispatch
-      $dispatch = new $controller($controller, $method);
+      $dispatch = new $controller();
 
       if(method_exists($controller, $method)) {
-        call_user_func_array([$dispatch, $method], $queryParameters);
+        call_user_func_array([
+          $dispatch, 
+          $method
+        ], [
+          $data
+        ]);
       } else {
         dd('That method does not exist in the controller \"' . $controller . '"');
       }

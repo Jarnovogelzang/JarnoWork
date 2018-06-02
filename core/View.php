@@ -1,37 +1,43 @@
 <?php
 
   class View {
-    private $head, $body, $siteTitle = DEFAULT_SITE_TITLE, $outputBuffer, $layout = DEFAULT_LAYOUT;
+    private $view, $head, $body, $siteTitle = DEFAULT_SITE_TITLE, $outputBuffer, $layout = DEFAULT_LAYOUT;
 
-    public function __construct() {
-
+    public function __construct(String $view) {
+      $this->view = $view;
     }
 
-    public function render($viewName) {
-      $viewArray = explode('/', $viewName);
+    public function render(array $data = null) {
+      $viewArray = explode('/', $this->view);
       $viewString = implode(DS, $viewArray);
 
       if(file_exists(ROOT . DS . 'app' . DS . 'views' . DS . $viewString . '.php')) {
+        if($data && !empty($data) && count($data) !== 0) {
+          foreach($data as $key => $value) {
+            ${$key} = $value; 
+          }
+        }
+
         include(ROOT . DS . 'app' . DS . 'views' . DS . $viewString . '.php');
         //include(ROOT . DS . 'app' . DS . 'views' . DS . 'layouts' . DS . $this->layout . '.php');
       } else {
-        dd('The view \"' . $viewName . '" does not exist.');
+        dd('The view \"' . $this->view . '" does not exist.');
       }
     }
 
-    public function content($type) {
+    public function content(String $type) {
       switch($type) {
         case 'head':
-          return $this->head;
+          return (String) $this->head;
         case 'body':
-          return $this->body;
+          return (String) $this->body;
         default:
           return false;
       }
     }
 
-    public function start($type) {
-      $this->outputBuffer = $type;
+    public function start(String $type) {
+      $this->outputBuffer = (String) $type;
       ob_start();
     }
 
@@ -49,14 +55,14 @@
     }
 
     public function getSiteTitle() {
-      return $this->siteTitle;
+      return (String) $this->siteTitle;
     }
 
     public function setSiteTitle(String $siteTitle) {
-      $this->siteTitle = $siteTitle;
+      $this->siteTitle = (String) $siteTitle;
     }
 
     public function setlayout(String $path) {
-      $this->layout = $path;
+      $this->layout = (String) $path;
     }
   }

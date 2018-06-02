@@ -1,25 +1,19 @@
 <?php
 
   class Controller extends Application {
-    private $controller, $method, $view;
-
-    public function __construct(String $controller, String $method) {
+    public function __construct() {
       parent::__construct();
-
-      $this->controller = $controller;
-      $this->method = $method;
-      $this->view = new View();
     }
 
-    protected function getController() {
-      return $this->controller;
+    public function renderViewWithData(String $view, array $data) {
+      return $this->getView($view)->render((array) $data);
     }
 
-    protected function getMethod() {
-      return $this->method;
+    public function renderView(String $view) {
+      return $this->getView($view)->render();
     }
 
-    protected function getView() {
-      return $this->view;
+    protected function getView(String $view) {
+      return new View($view);
     }
   }
